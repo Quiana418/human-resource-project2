@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    var list = [
+      { id: 1, name: "冰箱", pid: "" },
+      { id: 2, name: "海尔冰箱", pid: 1 },
+      { id: 3, name: "美的冰箱", pid: 1 },
+      { id: 4, name: "电视", pid: "" },
+      { id: 5, name: "小米电视", pid: 4 },
+      { id: 6, name: "小米电视-A款", pid: 5 },
+      { id: 7, name: "小米电视-B款", pid: 5 },
+    ];
+    // 普通写法
+    /*  // 存一级
+    var list1 = [];
+    list.forEach((item) => {
+      // 如果没有pid 说明是一级
+      if (item.pid === "") {
+        list1.push(item);
+
+        // 存二级
+        item.children = [];
+        list.forEach((item1) => {
+          // 如果二级的pid等于某个一级的id
+          if (item1.pid === item.id) {
+            item.children.push(item1);
+            item1.children = [];
+            list.forEach((item2) => {
+              if (item2.pid === item1.id) {
+                item1.children.push(item2);
+              }
+            });
+          }
+        });
+      }
+    });
+    console.log(list1); */
+
+    // 递归写法
+    // 通过pid找儿子
+    function fn(list, pid) {
+      var list1 = [];
+      list.forEach((item) => {
+        if (item.pid === pid) {
+          list1.push(item);
+          // 找一项的children 就把当前这一项的id作为pid去找
+          item.children = fn(list, item.id);
+        }
+      });
+      return list1;
+    }
+    var res = fn(list, "");
+    console.log(res);
+  </script>
+</html>

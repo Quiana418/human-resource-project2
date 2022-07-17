@@ -195,6 +195,9 @@ module.exports = {
     }],
     'array-bracket-spacing': [2, 'never'],
     'vue/html-self-closing': 0,
-    'vue/html-closing-bracket-newline': 0
+    'vue/html-closing-bracket-newline': 0,
+    'no-inner-declarations': 0,
+    'vue/max-attributes-per-line': 0,
+    'vue/html-indent': 0
   }
 }

@@ -9,6 +9,14 @@ import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 // 全局样式
 import '@/styles/index.scss' // global css
+// 全局自定义指令
+// import '@/directives'
+import * as obj from '@/directives' // 把自定义指令导出到一个obj对象里
+// Object.keys(obj) 把自定义指令的属性名提取到一个数组里['imgerror','']
+Object.keys(obj).forEach(item => {
+  // item==自定义属性名   obj[item]====属性值对象
+  Vue.directive(item, obj[item])
+})
 
 import App from './App'
 import store from './store'

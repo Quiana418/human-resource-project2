@@ -90,7 +90,7 @@ export default {
           { required: true, message: '手机号不能为空', trigger: 'blur' },
           { validator: validateMobile, trigger: 'blur' }],
         password: [
-          { required: true, message: '手机号不能为空', trigger: 'blur' },
+          { required: true, message: '密码不能为空', trigger: 'blur' },
           { min: 6, max: 16, message: '长度在6-16位之间', trigger: 'blur' }]
       },
       loading: false,
@@ -124,9 +124,12 @@ export default {
           // 加载状态
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
+            console.log(111)
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
+            // console.log(err)
+            // 登录失败后的提示信息 写到响应拦截器里面了
             this.loading = false
           })
         } else {
