@@ -34,9 +34,20 @@ export function getUserDetailById (id) {
   })
 }
 
+/**
+ * 退出登录
+ * @returns
+ */
 export function logout () {
   return request({
     url: '/vue-admin-template/user/logout',
     method: 'post'
+  })
+}
+
+// 获取简单用户列表 渲染到新增部门的表单中
+export const getSimpleUserList = () => {
+  return request({
+    url: '/sys/user/simple'
   })
 }

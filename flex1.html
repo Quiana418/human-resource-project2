@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="father">
+      <div class="son1"></div>
+      <div class="son2"></div>
+      <div class="son3"></div>
+    </div>
+  </body>
+  <style>
+    .father {
+      display: flex;
+      width: 600px;
+      height: 300px;
+      border: 1px solid black;
+    }
+    /*   .father div {
+      flex: 1;
+    } */
+    .son1 {
+      flex-grow: 1;
+      width: 100px;
+      height: 300px;
+      background-color: green;
+    }
+    .son2 {
+      flex-grow: 1;
+      width: 100px;
+      height: 300px;
+      background-color: blue;
+    }
+    .son3 {
+      width: 100px;
+      height: 300px;
+      background-color: pink;
+    }
+  </style>
+</html>

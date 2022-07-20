@@ -8,7 +8,7 @@
 
     <breadcrumb class="breadcrumb-container" />
     <div class="app-breadcrumb">
-      江苏传智播客教育科技股份有限公司
+      江南建筑设计院股份有限公司
       <span class="breadBtn">体验版</span>
     </div>
 
@@ -147,7 +147,7 @@ export default {
   font-size: 18px;
   line-height: 50px;
   margin-left: 10px;
-  color: black;
+  color: #fff;
   cursor: text;
   .breadBtn {
     background: #8ceeec;

@@ -145,3 +145,6 @@ Copyright (c) 2017-present PanJiaChen
   (6) 页面路由删改 搭建
 
   - 在 cmd 里面快速新建文件夹命令--mkdir departments employees setting salarys social attendances approvals permission
+
+ (7) 组织架构
+ (8) 公司设置
