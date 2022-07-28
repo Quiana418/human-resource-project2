@@ -8,7 +8,7 @@
 
     <breadcrumb class="breadcrumb-container" />
     <div class="app-breadcrumb">
-      江南建筑设计院股份有限公司
+      江南建筑设计院有限公司
       <span class="breadBtn">体验版</span>
     </div>
 

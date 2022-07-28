@@ -6,6 +6,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+// 静态路由
 export const constantRoutes = [
   {
     path: '/login',
@@ -117,6 +118,28 @@ export const asyncRoutes = [
       component: () => import('@/views/social/index'),
       meta: { title: '社保', icon: 'table' }
     }]
+  },
+  {
+    path: '/import',
+    hidden: true,
+    component: Layout,
+    children: [{
+      path: '',
+      name: 'Import',
+      component: () => import('@/views/import/index')
+    }]
+  },
+  {
+    path: '/employee/detail/:id',
+    hidden: true,
+    component: Layout,
+    children: [{
+      path: '',
+      name: 'EmployeeDetail',
+      component: () => import('@/views/employees/detail'),
+      props: true
+    }]
+
   }
 ]
 

@@ -1,6 +1,12 @@
 <template>
   <div class="dashboard-container">
-    <div class="app-container">权限管理</div>
+    <div class="app-container">
+      <PageToolBar>
+        <template #right>
+          <el-button type="primary" size="mini">添加权限</el-button>
+        </template>
+      </PageToolBar>
+    </div>
   </div>
 </template>
 

@@ -202,7 +202,7 @@ export default {
 
       // 根据角色id发请求 拿数据 数据回写到对话框
       const res1 = await getPermissionsById(id)
-      // console.log(res1)
+      console.log(res1)
       // 默认选中的权限
       this.selectedPermissions = res1.permIds
     },

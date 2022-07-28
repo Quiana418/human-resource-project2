@@ -5,7 +5,7 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+// import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 // 全局样式
 import '@/styles/index.scss' // global css
@@ -16,6 +16,19 @@ import * as obj from '@/directives' // 把自定义指令导出到一个obj对�
 Object.keys(obj).forEach(item => {
   // item==自定义属性名   obj[item]====属性值对象
   Vue.directive(item, obj[item])
+})
+
+// 打印
+import Print from 'vue-print-nb'
+// Global instruction
+Vue.use(Print)
+
+/* 批量导入全局过滤器 处理时间  filters是一个对象
+把过滤器名作为属性名
+过滤器函数作为值 */
+import * as filters from '@/filters'
+Object.keys(filters).forEach(item => {
+  Vue.filter(item, filters[item])
 })
 
 import App from './App'
@@ -42,6 +55,11 @@ import '@/permission' // permission control
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
+
+// 导入全局封装的插件
+import components from './components'
+// .use会自动执行install里面的方法
+Vue.use(components)
 
 Vue.config.productionTip = false
 
