@@ -9,6 +9,8 @@
     <div class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
         <navbar />
+        <!-- 顶部页签 -->
+        <TagsView></TagsView>
       </div>
       <app-main />
     </div>
@@ -101,5 +103,4 @@ export default {
   color: #85ff92;
   cursor: text;
 }
-
 </style>

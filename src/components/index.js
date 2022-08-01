@@ -1,6 +1,7 @@
 // 封装插件
 import PageToolBar from './PageToolBar'
 import UploadImage from './UploadImage/index.vue'
+import FullScreen from './FullScreen/index.vue'
 export default {
   /* Vue插件的写法
   1.定义一个插件插件就是一个普通的对象，只不过这个对象有一个固定的方法，名字叫install参数就是Vue
@@ -11,6 +12,7 @@ export default {
     // 封装全局的PageToolBar 页面顶部工具条
     Vue.component('PageToolBar', PageToolBar)
     Vue.component('UploadImage', UploadImage)
+    Vue.component('FullScreen', FullScreen)
     // Vue.filter
     // Vue.directive
     // Vue.prototype.eat = function () {}

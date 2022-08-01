@@ -146,5 +146,22 @@ Copyright (c) 2017-present PanJiaChen
 
   - 在 cmd 里面快速新建文件夹命令--mkdir departments employees setting salarys social attendances approvals permission
 
- (7) 组织架构
- (8) 公司设置
+(7) 组织架构
+(8) 公司设置
+
+- 根据角色分配权限
+  - 1.登录完成之后 筛选动态路由 ，如果根据 路由里的 name 去判断筛选（会出 bug（员工模块里面的查看点开是 404），所以要通过 meta：{name}来进行筛选, 把员工页面和 import 导出查看员工信息页面的 name 都改成 employees ）
+  - 2.sidebar/index.vue 中能使用的数据只有 data,props,Vuex->我们就要创建一个 permission 的 vuex 模块
+    因为这样就可以保证被筛选出来的 routes 能在组件中使用
+  - 3.首先不管是谁都有所有的静态路由表 const routes=[...constantRoutes]
+  - 4.store.dispatch 是异步的
+  - 5.当用户登录的时候就会在 state.user.userInfo.roles.menus 中可以知道当前这个人有哪些页面权限
+  - 6.对 asyncRoutes:这个是完整版进行 filter 根据当前用户页面权限点得到一个新的数组（根据动态路由的权限点进行筛选）
+  - 7.router.addRoutes(筛选之后动态路由表)
+    用户能访问的路由表= 所有静态路由+筛选后的部分动态路由
+  - 8.先登入管理员，在登入其他用户账号，会造成其他账号登录时，在地址栏中还能访问到不属于他的权限，是因为退出不彻底，还有上一次的历史遗留问题，解决：在 src/store/mudules/user.js 里面进行路由重置（在退出登录时调用 resetRouter，清空路由的历史遗留）
+    子模块调用子模块的 actions 可以将 commit 的第三个参数设置成 root: true}就表示当前的 context 不是子模块了而是父模块
+    把 permission 里面的数据 routes: [] 也重置
+    context.commit('permissions/setRoutes', [], { root: true })
+  - 9.问题：为什么从 dashboard 退出没问题，从 setting 退出重新登录页面就会空白；
+    解决：如果根据 路由里的 name 去判断筛选（会出 bug（员工模块里面的查看点开是 404），所以要通过添加 meta：{name}来进行筛选, 把员工页面和 import 导出查看员工信息页面的 name 都改成 employees ）

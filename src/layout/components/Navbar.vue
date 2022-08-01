@@ -7,10 +7,7 @@
     />
 
     <breadcrumb class="breadcrumb-container" />
-    <div class="app-breadcrumb">
-      江南建筑设计院有限公司
-      <span class="breadBtn">体验版</span>
-    </div>
+    <div class="app-breadcrumb">江南建筑设计院有限公司</div>
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
@@ -32,18 +29,50 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <!-- 国际化图标 -->
+    <div
+      style="float: right; height: 100%; line-height: 50px; margin-right: 20px"
+    >
+      <el-dropdown @command="handleCommand">
+        <span class="el-dropdown-link">
+          <svg-icon
+            icon-class="language"
+            style="color: #fff; font-size: 20px"
+          ></svg-icon>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="zh">中文</el-dropdown-item>
+          <el-dropdown-item command="en">en</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <!-- 全屏图标 -->
+      <FullScreen></FullScreen>
+      <!-- 主题切换 -->
+      <ThemePicker
+        style="
+          vertical-align: middle;
+          margin-left: 10px;
+          background-color: #fff;
+        "
+      ></ThemePicker>
+    </div>
   </div>
 </template>
 
 <script>
+import ThemePicker from '@/components/ThemePicker'
+import Cookies from 'js-cookie'
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import i18n from '@/language'
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    ThemePicker
   },
   computed: {
     ...mapGetters([
@@ -59,6 +88,12 @@ export default {
     async logout () {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    // 监听到切换语言
+    handleCommand (command) {
+      i18n.locale = command
+      // 选择之后 做持久化
+      Cookies.set('locale', command)
     }
   }
 }
@@ -149,15 +184,5 @@ export default {
   margin-left: 10px;
   color: #fff;
   cursor: text;
-  .breadBtn {
-    background: #8ceeec;
-    font-size: 14px;
-    padding: 0 10px;
-    display: inline-block;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 10px;
-    margin-left: 15px;
-  }
 }
 </style>

@@ -10,7 +10,7 @@ import store from '@/store'
 const whitespace = ['/login', '/404']
 
 // 前置路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // 开启进度条
   NProgress.start()
   // 根据是否有token 做权限控制
@@ -26,7 +26,17 @@ router.beforeEach((to, from, next) => {
       // 如果登陆过 要去其他地方 直接放行
       // 在这里可以拿用户数据 拿数据前进行判断 如果没有拿到过数据 才能拿
       if (!store.state.user.userInfo.id) {
-        store.dispatch('user/getInfo')
+        const userInfo = await store.dispatch('user/getInfo')
+        // 通过用户信息 得到menus 做权限管理
+        // newRoutes是筛选之后的动态路由表
+        // console.log(userInfo.roles.menus)
+        // console.log(store.state.user.userInfo.roles.menus)
+        const newRoutes = await store.dispatch('permission/filter', userInfo.roles.menus)
+        // 路由固定的用法
+        router.addRoutes([...newRoutes, { path: '*', redirect: '/404', hidden: true }])
+        // 解决为什么从dashboard退出没问题，从setting退出重新进去页面就会空白
+        // to.path就是当前路径
+        next(to.path)
       }
       next()
     }

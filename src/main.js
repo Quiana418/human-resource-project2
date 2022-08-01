@@ -37,7 +37,7 @@ import router from './router'
 
 import '@/icons' // icon svg图标
 import '@/permission' // permission control
-
+import i18n from '@/language'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -54,12 +54,22 @@ import '@/permission' // permission control
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
-Vue.use(ElementUI)
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
 
 // 导入全局封装的插件
 import components from './components'
 // .use会自动执行install里面的方法
 Vue.use(components)
+
+// 导入mixin
+import mixins from '@/mixin'
+Vue.mixin(mixins)
+
+// 导入顶部页签
+import TagsView from '@/components/TagsView'
+Vue.component('TagsView', TagsView)
 
 Vue.config.productionTip = false
 
@@ -67,5 +77,6 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: h => h(App)
 })
