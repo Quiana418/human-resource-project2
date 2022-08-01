@@ -12,7 +12,7 @@
         <!-- 顶部页签 -->
         <TagsView></TagsView>
       </div>
-      <app-main />
+      <app-main style="padding-top: 80px" />
     </div>
   </div>
 </template>
@@ -70,6 +70,7 @@ export default {
     top: 0;
   }
 }
+
 .drawer-bg {
   background: #000;
   opacity: 0.3;

@@ -2,6 +2,9 @@
 import PageToolBar from './PageToolBar'
 import UploadImage from './UploadImage/index.vue'
 import FullScreen from './FullScreen/index.vue'
+// 导入顶部页签
+import TagsView from '@/components/TagsView'
+
 export default {
   /* Vue插件的写法
   1.定义一个插件插件就是一个普通的对象，只不过这个对象有一个固定的方法，名字叫install参数就是Vue
@@ -13,6 +16,7 @@ export default {
     Vue.component('PageToolBar', PageToolBar)
     Vue.component('UploadImage', UploadImage)
     Vue.component('FullScreen', FullScreen)
+    Vue.component('TagsView', TagsView)
     // Vue.filter
     // Vue.directive
     // Vue.prototype.eat = function () {}

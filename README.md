@@ -150,6 +150,7 @@ Copyright (c) 2017-present PanJiaChen
 (8) 公司设置
 
 - 根据角色分配权限
+
   - 1.登录完成之后 筛选动态路由 ，如果根据 路由里的 name 去判断筛选（会出 bug（员工模块里面的查看点开是 404），所以要通过 meta：{name}来进行筛选, 把员工页面和 import 导出查看员工信息页面的 name 都改成 employees ）
   - 2.sidebar/index.vue 中能使用的数据只有 data,props,Vuex->我们就要创建一个 permission 的 vuex 模块
     因为这样就可以保证被筛选出来的 routes 能在组件中使用
@@ -165,3 +166,5 @@ Copyright (c) 2017-present PanJiaChen
     context.commit('permissions/setRoutes', [], { root: true })
   - 9.问题：为什么从 dashboard 退出没问题，从 setting 退出重新登录页面就会空白；
     解决：如果根据 路由里的 name 去判断筛选（会出 bug（员工模块里面的查看点开是 404），所以要通过添加 meta：{name}来进行筛选, 把员工页面和 import 导出查看员工信息页面的 name 都改成 employees ）
+
+    最后 nodemon app.js

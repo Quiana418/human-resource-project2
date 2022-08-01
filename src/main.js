@@ -67,10 +67,6 @@ Vue.use(components)
 import mixins from '@/mixin'
 Vue.mixin(mixins)
 
-// 导入顶部页签
-import TagsView from '@/components/TagsView'
-Vue.component('TagsView', TagsView)
-
 Vue.config.productionTip = false
 
 new Vue({
