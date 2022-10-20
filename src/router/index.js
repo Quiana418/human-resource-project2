@@ -81,7 +81,7 @@ export const asyncRoutes = [
     path: '/employees',
     component: Layout,
     children: [{
-      path: '',
+      path: '', // 这里不写内容，表示默认展示一级的layout和二级导入员工页面
       name: 'employees',
       component: () => import('@/views/employees/index'),
       meta: { title: '员工', icon: 'people' }

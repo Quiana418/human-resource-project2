@@ -117,11 +117,11 @@ export function param2Obj (url) {
 }
 
 // 数据需要处理一下 通过pid找儿子 提取出去公用
-// 递归处理数据 把数据处理成树形结构
+// 递归处理数据 把数据处理成树形结构,先找根(根节点的pid都为空)
 export function transferListToTree (list, pid) {
   var list1 = []
   list.forEach(item => {
-    if (item.pid === pid) {
+    if (item.pid === pid) { //先找根
       list1.push(item)
       item.children = transferListToTree(list, item.id)
     }

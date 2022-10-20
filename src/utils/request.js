@@ -13,7 +13,7 @@ const request = axios.create({
 
 // 添加请求拦截器
 request.interceptors.request.use(function (config) {
-  // 在发送请求之前做些什么----注入token
+  // 在发送请求之前做些什么----统一注入token
   const token = store.getters.token
   if (token) {
     // 判断时间是否大于两小时 如果超过两小时 退出  主动介入

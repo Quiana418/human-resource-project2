@@ -14,9 +14,12 @@ Vue.directive('imgerror', {
 // 改写版
 export const imgerror = {
   update (el, binding) {
-    // el.src = binding.value
+    // el是指令所在的元素
+    // binding是指令中变量的详细信息 其中有一个属性是value
+    // 图片的onerror事件
     el.onerror = function () {
-      el.src = 'http://ihrm.itheima.net/static/img/head.b6c3427d.jpg'
+      // el.src = 'http://ihrm.itheima.net/static/img/head.b6c3427d.jpg'
+      el.src = binding.value
     }
   }
 }

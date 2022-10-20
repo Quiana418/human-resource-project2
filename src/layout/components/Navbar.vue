@@ -12,7 +12,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img v-imgerror :src="avatar" class="user-avatar" />
+          <img v-imgerror="defaultImg" :src="avatar" class="user-avatar" />
           <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" style="color: #fff" />
         </div>
@@ -61,42 +61,44 @@
 </template>
 
 <script>
-import ThemePicker from '@/components/ThemePicker'
-import Cookies from 'js-cookie'
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import i18n from '@/language'
+import ThemePicker from "@/components/ThemePicker";
+import Cookies from "js-cookie";
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import i18n from "@/language";
 
 export default {
+  data() {
+    return {
+      defaultImg: require("@/./assets/common/head.jpg"),
+    };
+  },
   components: {
     Breadcrumb,
     Hamburger,
-    ThemePicker
+    ThemePicker,
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar',
-      'name'
-    ])
+    ...mapGetters(["sidebar", "avatar", "name"]),
   },
   methods: {
-    toggleSideBar () {
-      this.$store.dispatch('app/toggleSideBar')
+    toggleSideBar() {
+      this.$store.dispatch("app/toggleSideBar");
     },
-    async logout () {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    async logout() {
+      await this.$store.dispatch("user/logout");
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+      this.$router.push(`/login`);
     },
     // 监听到切换语言
-    handleCommand (command) {
-      i18n.locale = command
+    handleCommand(command) {
+      i18n.locale = command;
       // 选择之后 做持久化
-      Cookies.set('locale', command)
-    }
-  }
-}
+      Cookies.set("locale", command);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

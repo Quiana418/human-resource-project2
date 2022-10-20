@@ -50,11 +50,11 @@ const actions = {
     // 把数据返回出去 在permission.js里直接打印出来做权限
     return res
   },
-  // 退出登录
+  // 退出登录 清空token和用户信息
   logout (context) {
     context.commit('removeToken')
     context.commit('removeUserInfo')
-    // 退出登录时 清空路由的历史遗留
+    // 清空路由的历史遗留
     resetRouter()
     // 子模块调用子模块的actions可以将commit的第三个参数设置成root: true}就表示当前的context不是子模块了而是父模块
     // 把permission里面的数据routes: [] 也重置
