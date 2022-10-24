@@ -124,10 +124,10 @@ export default {
         const pid = this.node.pid;
         // 找到当前要编辑的所有兄弟(item => item.pid === pid)（排除自身item.id === this.node.id）
         // some(item => item.name === value) 说明正在修改的名字和兄弟的名字重复了
-        res.depts
-          .filter((item) => item.pid === pid && item.id !== this.node.id)
-          .some((item) => item.name === value)
-          ? callback(new Error("部门名称不能重复"))
+        const isRepeat = res.depts
+          .filter((item) => item.pid === pid && item.id !== this.node.id).some((item) => item.name === value)
+
+        isRepeat  ? callback(new Error("部门名称不能重复"))
           : callback();
       } else {
         // 添加

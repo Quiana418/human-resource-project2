@@ -1,5 +1,12 @@
 <template>
-  <el-form style="width: 600px">
+  <el-form style="width: 800px">
+    <el-alert
+      title="对公司名称、公司地址、营业执照、公司地区的更新，将使得公司资料被重新审核，请谨慎修改"
+      type="info"
+      show-icon
+      :closable="false"
+      style="margin: 16px 0 30px 0"
+    />
     <el-form-item label="企业名称" label-width="80px">
       <el-input :value="companyInfo.name" disabled></el-input>
     </el-form-item>
@@ -23,30 +30,28 @@
 </template>
 
 <script>
-import { getCompanyInfo } from '@/api/setting'
-import { mapGetters } from 'vuex'
+import { getCompanyInfo } from "@/api/setting";
+import { mapGetters } from "vuex";
 export default {
-  name: 'CompanyInfo',
+  name: "CompanyInfo",
   filters: {},
   components: {},
-  data () {
+  data() {
     return {
       // 公司信息
-      companyInfo: []
-    }
+      companyInfo: [],
+    };
   },
   computed: {
-    ...mapGetters(['companyId'])
+    ...mapGetters(["companyId"]),
   },
   watch: {},
-  async created () {
-    const res = await getCompanyInfo(this.companyId)
-    console.log(res)
-    this.companyInfo = res
+  async created() {
+    const res = await getCompanyInfo(this.companyId);
+    this.companyInfo = res;
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

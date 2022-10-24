@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container">
       <!-- 顶部工具条 -->
-      <PageToolBar title="共1条记录">
+      <PageToolBar :title="`共${total}条记录`">
         <template #right>
           <el-button type="danger" size="mini" @click="exportExcel"
             >普通Excel导出</el-button
@@ -28,6 +28,7 @@
       <el-card>
         <el-table border :data="employee">
           <el-table-column
+            :index="form.size * (form.page - 1) + 1"
             label="序号"
             type="index"
             align="center"
@@ -224,45 +225,52 @@
         <canvas ref="canvas"></canvas>
       </el-row>
     </el-dialog>
+
+    <Pagination
+      :total="total"
+      :page.sync="form.page"
+      :limit.sync="form.size"
+      @pagination="getEmployee"
+    ></Pagination>
   </div>
 </template>
 
 <script>
-import QRCode from 'qrcode'
-import { getDepartmentsList } from '@/api/departments'
-import { validMobile } from '@/utils/validate'
-import { getUserDetailById } from '@/api/user'
-import { getRoleList } from '@/api/setting'
-import { getEmployee, assignRoles } from '@/api/employee'
-import employees from '@/constant/employees'
+import QRCode from "qrcode";
+import { getDepartmentsList } from "@/api/departments";
+import { validMobile } from "@/utils/validate";
+import { getUserDetailById } from "@/api/user";
+import { getRoleList } from "@/api/setting";
+import { getEmployee, assignRoles } from "@/api/employee";
+import employees from "@/constant/employees";
 export default {
-  name: 'Employee',
+  name: "Employee",
   filters: {
     // 用插槽+过滤器处理聘用形式数据
-    formatRentType (id) {
-      var obj = employees.hireType.find(item => item.id === id - 0)
+    formatRentType(id) {
+      var obj = employees.hireType.find((item) => item.id === id - 0);
       if (obj) {
-        return employees.hireType.find(item => item.id === id - 0).value
+        return employees.hireType.find((item) => item.id === id - 0).value;
       } else {
-        return '未知'
+        return "未知";
       }
-    }
+    },
   },
   components: {},
-  data () {
+  data() {
     // 自定义手机号校验规则
     const validateMobile = (rule, value, callback) => {
-      validMobile(value) ? callback() : callback(new Error('手机号格式不正确'))
-    }
+      validMobile(value) ? callback() : callback(new Error("手机号格式不正确"));
+    };
     return {
       form: {
         page: 1,
-        size: 9999
+        size: 10,
       },
       // 员工列表
       employee: [],
       // 每页显示总条数
-      total: '',
+      total: 0,
       // 控制角色对话框
       dialogVisible: false,
       // 角色对话框复选框 选中的数组
@@ -270,59 +278,55 @@ export default {
       // 角色列表数组
       roleList: [],
       // 员工id
-      id: '',
+      id: "",
       // 控制新增员工对话框
       addEmployeeVisible: false,
       // 新增员工 表单信息
       employeeForm: {
-        username: '',
-        mobile: '',
-        formOfEmployment: '',
-        workNumber: '',
-        departmentName: '',
-        timeOfEntry: '',
-        correctionTime: ''
+        username: "",
+        mobile: "",
+        formOfEmployment: "",
+        workNumber: "",
+        departmentName: "",
+        timeOfEntry: "",
+        correctionTime: "",
       },
       // 新增员工表单校验规则
       employeeFormRules: {
         mobile: [
-          { required: true, message: '必填', trigger: 'blur' },
-          { validator: validateMobile, trigger: 'blur' }
+          { required: true, message: "必填", trigger: "blur" },
+          { validator: validateMobile, trigger: "blur" },
         ],
-        timeOfEntry: [
-          { required: true, message: '必填', trigger: 'blur' }
-        ],
-        workNumber: [
-          { required: true, message: '必填', trigger: 'blur' }
-        ]
-
+        timeOfEntry: [{ required: true, message: "必填", trigger: "blur" }],
+        workNumber: [{ required: true, message: "必填", trigger: "blur" }],
       },
       // 聘用形式
       hireType: employees.hireType,
       // 部门列表
       departmentList: [],
-      qrCodeVisible: false
-    }
+      qrCodeVisible: false,
+    };
   },
   computed: {},
   watch: {},
-  created () {
-    this.getEmployee()
+  created() {
+    this.getEmployee();
   },
   methods: {
     // 获取员工列表
-    async getEmployee () {
-      const res = await getEmployee(this.form)
-      this.employee = res.rows
-      this.total = res.total
+    async getEmployee() {
+      const res = await getEmployee(this.form);
+      this.employee = res.rows;
+      this.total = res.total;
     },
     // 用formatter处理聘用形式数据
-    formatterEmployType (row, colum, cellValue, index) {
-      var obj = employees.hireType.find(item => item.id === cellValue - 0)
+    formatterEmployType(row, colum, cellValue, index) {
+      var obj = employees.hireType.find((item) => item.id === cellValue - 0);
       if (obj) {
-        return employees.hireType.find(item => item.id === cellValue - 0).value
+        return employees.hireType.find((item) => item.id === cellValue - 0)
+          .value;
       } else {
-        return '未知'
+        return "未知";
       }
     },
     // 点击导出Excel 用懒加载方式导入文件
@@ -341,128 +345,135 @@ export default {
     } */
 
     // 点击导出Excel 用懒加载方式导入文件
-    async exportExcel () {
-      const { rows } = await getEmployee({ page: 1, pagesize: 9999 })
-      rows.forEach(item => {
-        delete item.password
-        delete item.staffPhoto
-      })
+    async exportExcel() {
+      const { rows } = await getEmployee(this.form);
+      rows.forEach((item) => {
+        delete item.password;
+        delete item.staffPhoto;
+      });
       // 把列别熬数据进行加工 变成二维数组
-      var data = []
-      rows.forEach(item => {
-        data.push(Object.values(item))
-      })
+      var data = [];
+      rows.forEach((item) => {
+        data.push(Object.values(item));
+      });
       const headers = {
-        'id': '编号',
-        'username': '姓名',
-        'mobile': '手机',
-        'timeOfEntry': '入职日期',
-        'formOfEmployment': '聘用形式',
-        'correctionTime': '转正日期',
-        'workNumber': '工号',
-        'departmentName': '部门'
-      }
-      var tHeader = Object.keys(rows[0]).map(item => (headers[item]))
+        id: "编号",
+        username: "姓名",
+        mobile: "手机",
+        timeOfEntry: "入职日期",
+        formOfEmployment: "聘用形式",
+        correctionTime: "转正日期",
+        workNumber: "工号",
+        departmentName: "部门",
+      };
+      var tHeader = Object.keys(rows[0]).map((item) => headers[item]);
       // console.log(tHeader)
 
-      import('@/vendor/Export2Excel').then(excel => {
+      import("@/vendor/Export2Excel").then((excel) => {
         excel.export_json_to_excel({
           header: tHeader, // 表头 必填
           data, // 具体数据 必填
-          filename: 'excel-list', // 非必填
+          filename: "excel-list", // 非必填
           autoWidth: true, // 非必填
-          bookType: 'xlsx' // 非必填
-        })
-      })
+          bookType: "xlsx", // 非必填
+        });
+      });
     },
 
     // 导出复杂表头Excel
-    exportExcel1 () {
-      const multiHeader = [['', '主要信息', '', '', '', '', '']]
-      const merges = ['A1:A2', 'B1:F1', 'G1:G2']
-      const tHeader = ['姓名', '手机号', '入职日期', '聘用形式', '转正日期', '工号', '部门']
+    exportExcel1() {
+      const multiHeader = [["", "主要信息", "", "", "", "", ""]];
+      const merges = ["A1:A2", "B1:F1", "G1:G2"];
+      const tHeader = [
+        "姓名",
+        "手机号",
+        "入职日期",
+        "聘用形式",
+        "转正日期",
+        "工号",
+        "部门",
+      ];
       const data = [
-        ['张三', '13000000', '2019-1-1', '正式', '2019-1-2', '110', 'java部门'],
-        ['李四', '13000000', '2019-1-1', '正式', '2019-1-2', '111', 'java部门']
-      ]
+        ["张三", "13000000", "2019-1-1", "正式", "2019-1-2", "110", "java部门"],
+        ["李四", "13000000", "2019-1-1", "正式", "2019-1-2", "111", "java部门"],
+      ];
 
-      import('@/vendor/Export2Excel').then(excel => {
+      import("@/vendor/Export2Excel").then((excel) => {
         excel.export_json_to_excel({
           header: tHeader, // 表头 必填
           multiHeader, // 第一行表头 复杂表头
           data, // 具体数据 必填
-          filename: 'excel-list', // 非必填
+          filename: "excel-list", // 非必填
           autoWidth: true, // 非必填
-          bookType: 'xlsx', // 非必填
-          merges // 设置合并规则
-        })
-      })
+          bookType: "xlsx", // 非必填
+          merges, // 设置合并规则
+        });
+      });
     },
 
     // 点击角色 弹出对话框
-    async showRoleDialog (id) {
-      this.id = id
+    async showRoleDialog(id) {
+      this.id = id;
       // 请求获取表单内所有的角色
-      const { rows } = await getRoleList({ page: 1, pagesize: 9999 })
-      this.roleList = rows
+      const { rows } = await getRoleList({ page: 1, pagesize: 9999 });
+      this.roleList = rows;
       // 请求获取每个员工已有的角色（在表单内打上勾）
-      const { roleIds } = await getUserDetailById(id)
-      this.checkList = roleIds
-      this.dialogVisible = true
+      const { roleIds } = await getUserDetailById(id);
+      this.checkList = roleIds;
+      this.dialogVisible = true;
     },
 
     // 点击角色对话框的确定 分配角色
-    async assignRoles () {
+    async assignRoles() {
       const res = await assignRoles({
         id: this.id,
-        roleIds: this.checkList
-      })
-      console.log(res)
-      this.dialogVisible = false
+        roleIds: this.checkList,
+      });
+      console.log(res);
+      this.dialogVisible = false;
     },
 
     // 关闭新增员工表单 重置表单
-    closeAddForm () {
-      this.$refs.myForm.resetFields()
-      this.departmentList = []
+    closeAddForm() {
+      this.$refs.myForm.resetFields();
+      this.departmentList = [];
     },
 
     // 光标订到组织结构输入框内 显示所有部门
-    async showDepartment () {
-      const res = await getDepartmentsList()
+    async showDepartment() {
+      const res = await getDepartmentsList();
       // 我们的数据不能直接使用，而是先加工处理一下才能使用 递归在写的时候慢慢就意识到了 层次不确定
-      function transferListToTree (list, pid) {
-        var list1 = []
-        list.forEach(item => {
+      function transferListToTree(list, pid) {
+        var list1 = [];
+        list.forEach((item) => {
           if (item.pid === pid) {
-            list1.push(item)
-            item.children = transferListToTree(list, item.id)
+            list1.push(item);
+            item.children = transferListToTree(list, item.id);
           }
-        })
-        return list1
+        });
+        return list1;
       }
-      this.departmentList = transferListToTree(res.depts, '')
+      this.departmentList = transferListToTree(res.depts, "");
     },
 
     // 点击tree里面的节点 关闭tree 同时把点击的节点赋值给表单
-    handleNodeClick (obj) {
-      this.employeeForm.departmentName = obj.name
-      this.departmentList = []
+    handleNodeClick(obj) {
+      this.employeeForm.departmentName = obj.name;
+      this.departmentList = [];
     },
 
     // 点击图片显示qrcode
-    showQrCode () {
-      this.qrCodeVisible = true
+    showQrCode() {
+      this.qrCodeVisible = true;
       this.$nextTick(() => {
-        QRCode.toCanvas(this.$refs.canvas, 'sample text', function (error) {
-          if (error) console.error(error)
-          console.log('success')
-        })
-      })
-    }
-  }
-}
+        QRCode.toCanvas(this.$refs.canvas, "sample text", function (error) {
+          if (error) console.error(error);
+          console.log("success");
+        });
+      });
+    },
+  },
+};
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

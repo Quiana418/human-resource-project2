@@ -132,123 +132,135 @@
   </div>
 </template>
 <script>
-import * as echarts from 'echarts/core'
-import { TitleComponent, LegendComponent, TooltipComponent, ToolboxComponent, PolarComponent } from 'echarts/components'
-import { RadarChart } from 'echarts/charts'
-import { CanvasRenderer } from 'echarts/renderers'
+import * as echarts from "echarts/core";
+import {
+  TitleComponent,
+  LegendComponent,
+  TooltipComponent,
+  ToolboxComponent,
+  PolarComponent,
+} from "echarts/components";
+import { RadarChart } from "echarts/charts";
+import { CanvasRenderer } from "echarts/renderers";
 
-echarts.use([TitleComponent, LegendComponent, RadarChart, CanvasRenderer, TooltipComponent, ToolboxComponent, PolarComponent])
+echarts.use([
+  TitleComponent,
+  LegendComponent,
+  RadarChart,
+  CanvasRenderer,
+  TooltipComponent,
+  ToolboxComponent,
+  PolarComponent,
+]);
 
-import { mapGetters } from 'vuex'
-import WorkCalendar from './components/WorkCalendar.vue'
+import { mapGetters } from "vuex";
+import WorkCalendar from "./components/WorkCalendar.vue";
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: { WorkCalendar },
   computed: {
-    ...mapGetters([
-      'name', 'userInfo'
-    ])
+    ...mapGetters(["name", "userInfo"]),
   },
-  mounted () {
-    var chartDom = document.getElementById('main')
-    var myChart = echarts.init(chartDom)
-    var option
+  mounted() {
+    var chartDom = document.getElementById("main");
+    var myChart = echarts.init(chartDom);
+    var option;
     option = {
       title: {
-        text: 'absedfewgfwef',
-        subtext: '纯属虚构'
+        text: "absedfewgfwef",
+        subtext: "纯属虚构",
       },
       tooltip: {
-        trigger: 'axis'
+        trigger: "axis",
       },
       legend: {
-        orient: 'vertical',
-        x: 'right',
-        y: 'bottom',
-        data: ['预算分配', '实际开销']
+        orient: "vertical",
+        x: "right",
+        y: "bottom",
+        data: ["预算分配", "实际开销"],
       },
       toolbox: {
         feature: {
           mark: {
-            show: true
+            show: true,
           },
           dataView: {
             show: true,
-            readOnly: false
+            readOnly: false,
           },
           restore: {
-            show: true
+            show: true,
           },
           saveAsImage: {
-            show: true
-          }
-        }
+            show: true,
+          },
+        },
       },
       polar: [
         {
           indicator: [
             {
-              text: '销售',
+              text: "销售",
               max: 6000,
-              min: 0
+              min: 0,
             },
             {
-              text: '管理',
+              text: "管理",
               max: 16000,
-              min: 0
+              min: 0,
             },
             {
-              text: '信息技术',
+              text: "信息技术",
               max: 30000,
-              min: 0
+              min: 0,
             },
             {
-              text: '客服',
+              text: "客服",
               max: 38000,
-              min: 0
+              min: 0,
             },
             {
-              text: '研发',
+              text: "研发",
               max: 52000,
-              min: 0
+              min: 0,
             },
             {
-              text: '市场',
+              text: "市场",
               max: 25000,
-              min: 0
-            }
-          ]
-        }
+              min: 0,
+            },
+          ],
+        },
       ],
       calculable: true,
       series: [
         {
-          name: '',
-          type: 'radar',
+          name: "",
+          type: "radar",
           data: [
             {
               value: [4300, 10000, 28000, 35000, 50000, 19000],
-              name: '预算分配'
-            }
-          ]
+              name: "预算分配",
+            },
+          ],
         },
         {
-          name: '',
-          type: 'radar',
+          name: "",
+          type: "radar",
           data: [
             {
               value: [5000, 14000, 28000, 31000, 42000, 21000],
-              name: '实际开销'
-            }
-          ]
-        }
-      ]
-    }
+              name: "实际开销",
+            },
+          ],
+        },
+      ],
+    };
 
-    option && myChart.setOption(option)
-  }
-}
+    option && myChart.setOption(option);
+  },
+};
 </script>
 
 <style lang="scss" scoped>

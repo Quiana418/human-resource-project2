@@ -2,6 +2,7 @@
   <el-card>
     <!-- 顶部工具条 -->
     <el-row type="flex" justify="space-between" align="middle">
+      <!-- 前插槽 -->
       <el-col>
         <el-alert
           v-if="title.length > 0"
@@ -13,6 +14,7 @@
         </el-alert>
       </el-col>
 
+      <!-- 后插槽 -->
       <el-col>
         <el-row type="flex" justify="end">
           <slot name="right"> </slot>
@@ -29,20 +31,20 @@ export default {
   props: {
     title: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   computed: {},
   watch: {},
-  created () { },
-  methods: {}
-}
+  created() {},
+  methods: {},
+};
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .el-alert {
   display: inline;
   width: unset;

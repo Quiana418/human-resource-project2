@@ -1,5 +1,6 @@
 // 封装插件
 import PageToolBar from './PageToolBar'
+import Pagination from './Pagination'
 import UploadImage from './UploadImage/index.vue'
 import FullScreen from './FullScreen/index.vue'
 // 导入顶部页签
@@ -17,6 +18,7 @@ export default {
     Vue.component('UploadImage', UploadImage)
     Vue.component('FullScreen', FullScreen)
     Vue.component('TagsView', TagsView)
+    Vue.component('Pagination', Pagination)
     // Vue.filter
     // Vue.directive
     // Vue.prototype.eat = function () {}
