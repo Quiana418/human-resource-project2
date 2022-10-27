@@ -9,6 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 // 全局样式
 import '@/styles/index.scss' // global css
+
+
 // 全局自定义指令
 // import '@/directives'
 import * as obj from '@/directives' // 把自定义指令导出到一个obj对象里

@@ -81,9 +81,11 @@ export default {
       e.preventDefault()
       e.dataTransfer.dropEffect = 'copy'
     },
+    // 点击上传按钮
     handleUpload () {
       this.$refs['excel-upload-input'].click()
     },
+    // 选择了文件之后触发
     handleClick (e) {
       const files = e.target.files
       const rawFile = files[0] // only use files[0]

@@ -26,7 +26,7 @@
       </PageToolBar>
 
       <el-card>
-        <el-table border :data="employee">
+        <el-table border :data="employee" v-loading="loading">
           <el-table-column
             :index="form.size * (form.page - 1) + 1"
             label="序号"
@@ -105,9 +105,10 @@
 
           <el-table-column label="操作" align="center" style="width: 450px">
             <template v-slot="scope">
+              <!-- @click="$router.push(`/employees/detail/${scope.row.id`} )" -->
               <el-button
                 type="text"
-                @click="$router.push('/employee/detail/' + scope.row.id)"
+                @click="$router.push('/employees/detail/' + scope.row.id)"
                 >查看</el-button
               >
               <el-button type="text">转正</el-button>
@@ -116,7 +117,9 @@
               <el-button type="text" @click="showRoleDialog(scope.row.id)"
                 >角色</el-button
               >
-              <el-button type="text">删除</el-button>
+              <el-button type="text" @click="delEmployee(scope.row.id)"
+                >删除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -213,9 +216,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addEmployeeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addEmployeeVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="addEmployee">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -241,7 +242,12 @@ import { getDepartmentsList } from "@/api/departments";
 import { validMobile } from "@/utils/validate";
 import { getUserDetailById } from "@/api/user";
 import { getRoleList } from "@/api/setting";
-import { getEmployee, assignRoles } from "@/api/employee";
+import {
+  getEmployee,
+  assignRoles,
+  delEmployee,
+  addEmployee,
+} from "@/api/employee";
 import employees from "@/constant/employees";
 export default {
   name: "Employee",
@@ -249,11 +255,7 @@ export default {
     // 用插槽+过滤器处理聘用形式数据
     formatRentType(id) {
       var obj = employees.hireType.find((item) => item.id === id - 0);
-      if (obj) {
-        return employees.hireType.find((item) => item.id === id - 0).value;
-      } else {
-        return "未知";
-      }
+      return obj ? obj.value : "未知呢";
     },
   },
   components: {},
@@ -267,6 +269,7 @@ export default {
         page: 1,
         size: 10,
       },
+      loading: false,
       // 员工列表
       employee: [],
       // 每页显示总条数
@@ -315,34 +318,55 @@ export default {
   methods: {
     // 获取员工列表
     async getEmployee() {
+      this.loading = true;
       const res = await getEmployee(this.form);
+      this.loading = false;
       this.employee = res.rows;
       this.total = res.total;
     },
+    // 删除员工
+    delEmployee(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          this.$message({
+            type: "success",
+            message: "删除成功",
+          });
+          await delEmployee(id);
+          this.getEmployee();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消删除",
+          });
+        });
+    },
+
+    // 新增员工
+    async addEmployee() {
+      try {
+        await this.$refs.myForm.validate((valid) => {
+          if (!valid) return false;
+        });
+        await addEmployee(this.employeeForm);
+        this.addEmployeeVisible = false;
+        await this.$message("新增成功");
+        this.getEmployee();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     // 用formatter处理聘用形式数据
     formatterEmployType(row, colum, cellValue, index) {
       var obj = employees.hireType.find((item) => item.id === cellValue - 0);
-      if (obj) {
-        return employees.hireType.find((item) => item.id === cellValue - 0)
-          .value;
-      } else {
-        return "未知";
-      }
+      return obj ? obj.value : "未知";
     },
-    // 点击导出Excel 用懒加载方式导入文件
-    /*  exportExcel () {
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['编号', '任务名']
-        const data = [[1, '吃饭'], [2, '睡觉']]
-        excel.export_json_to_excel({
-          header: tHeader, // 表头 必填
-          data, // 具体数据 必填
-          filename: 'excel-list', // 非必填
-          autoWidth: true, // 非必填
-          bookType: 'xlsx' // 非必填
-        })
-      })
-    } */
 
     // 点击导出Excel 用懒加载方式导入文件
     async exportExcel() {
@@ -351,7 +375,7 @@ export default {
         delete item.password;
         delete item.staffPhoto;
       });
-      // 把列别熬数据进行加工 变成二维数组
+      // 把数组套对象格式的数据进行加工 变成二维数组
       var data = [];
       rows.forEach((item) => {
         data.push(Object.values(item));
@@ -372,7 +396,7 @@ export default {
       import("@/vendor/Export2Excel").then((excel) => {
         excel.export_json_to_excel({
           header: tHeader, // 表头 必填
-          data, // 具体数据 必填
+          data, // 具体数据 必填 数组套数组格式
           filename: "excel-list", // 非必填
           autoWidth: true, // 非必填
           bookType: "xlsx", // 非必填
@@ -439,7 +463,7 @@ export default {
       this.departmentList = [];
     },
 
-    // 光标订到组织结构输入框内 显示所有部门
+    // 光标定到组织结构输入框内 显示所有部门
     async showDepartment() {
       const res = await getDepartmentsList();
       // 我们的数据不能直接使用，而是先加工处理一下才能使用 递归在写的时候慢慢就意识到了 层次不确定
@@ -447,8 +471,9 @@ export default {
         var list1 = [];
         list.forEach((item) => {
           if (item.pid === pid) {
-            list1.push(item);
-            item.children = transferListToTree(list, item.id);
+            // 先找父级
+            list1.push(item); // 找到了追加进数组
+            item.children = transferListToTree(list, item.id); // 再找儿子
           }
         });
         return list1;

@@ -15,12 +15,29 @@ export const getEmployee = ({ page, size }) => {
   })
 }
 
+// 删除员工
+export const delEmployee = (id) => {
+  return request({
+    url: `/sys/user/${id}`,
+    method: 'DELETE'
+  })
+}
+
+// 新增员工
+export const addEmployee = (data)=>{
+  return request({
+    url: '/sys/user',
+    method: 'POST',
+    data
+  })
+}
+
 // 批量导入员工数据
 export const importEmployee = (data) => {
   return request({
     method: 'POST',
     url: '/sys/user/batch',
-    data
+    data // 是数组
 
   })
 }

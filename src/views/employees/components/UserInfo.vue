@@ -7,7 +7,7 @@
     ></i>
 
     <div id="printMe">
-      <!-- 个人信息 -->
+      <!-- 基本信息 -->
       <el-form label-width="220px">
         <!-- 工号 入职时间 -->
         <el-row class="inline-info">
@@ -77,7 +77,7 @@
           </el-col>
         </el-row>
       </el-form>
-      <!-- 基础信息 -->
+      <!-- 详细信息 -->
       <el-form label-width="220px">
         <div class="block">
           <div class="title">基础信息</div>
